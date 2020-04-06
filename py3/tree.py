@@ -1,22 +1,21 @@
 import sys
 import json
+from collections import OrderedDict
 
-def parse_field( name, value, depth, last_item ):
-  depth_print = '│   ' * ( depth - 1 )
-  bar_print = ''
-  
-  if depth:
-    bar_print = '└── ' if last_item else '├── '
-  name_end_print = '/' if value else ''
-  
-  print( f"{depth_print}{bar_print}{name}{name_end_print}" )
+def parse_objects( objects, padding, start=False ):
+  objects = OrderedDict( sorted( objects.items() ) )
 
-  for index, value_name in enumerate( value ):
-    value_value = value[value_name]
-    value_last = index == len( value ) - 1
+  for index, entry in enumerate( objects ):
+    last_item = entry == list( objects.keys() )[-1]
+    name_end_print = '/' if objects[entry] else ''
 
-    parse_field( name=value_name, value=value_value, depth=depth + 1, last_item=value_last )
+    bar_print = '' if start else '└── ' if last_item else '├── '
 
+    print( f"{padding}{bar_print}{entry}{name_end_print}" )
+
+    if objects[entry]:
+      append_padding = '' if start else '    ' if last_item else '│   '
+      parse_objects( objects[entry], padding + append_padding )
 
 if len( sys.argv ) is not 2:
   print(
@@ -28,9 +27,4 @@ if len( sys.argv ) is not 2:
   sys.exit()
 
 tree = json.load( open( sys.argv[1] ) )
-
-for index, field in enumerate( tree ):
-  field_value = tree[field]
-  last_item = index == len( tree ) - 1
-
-  parse_field( name=field, value=field_value, depth=0, last_item=last_item )
+parse_objects( tree, padding='', start=True )

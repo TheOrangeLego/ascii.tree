@@ -6,6 +6,7 @@ A small project that pretty prints an ASCII representation of a data hierarchy t
 
 To run the project, run the following in the directory of your language of choice
 
+* `py2` - `python tree.py <file>`
 * `py3` - `python3 tree.py <file>`
 
 ### Sample
@@ -38,6 +39,7 @@ foo/
 
 ### Requirements
 
-Below are the requirements to run each language implementation of the project
+Below are the minimum requirements to run each language implementation of the project
 
+* `py2` - Python 2.7
 * `py3` - Python 3.8+
